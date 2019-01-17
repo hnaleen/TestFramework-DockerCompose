@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  eureka:
+    image: eureka
+    container_name: EurekaServer
+    environment: 
+      - server_port=8761
+    ports: 
+      - "8761:8761"
+    networks: 
+      - my-net
+
+  testgateway:
+    image: testgateway
+    container_name: TestServiceGatway
+    depends_on: 
+      - eureka
+    environment: 
+      - server_port=8910
+    ports:
+      - "8910:8910"
+    networks: 
+      - my-net
+
+  testslave:
+    image: aftslave
+    container_name: TestSlave
+    depends_on: 
+      - eureka
+      - testgateway
+    volumes:
+      - "C:/Software/mvn_repo_352:/home/aft/mvn_repo"
+    deploy:
+      replicas: 2
+    environment: 
+      - TZ=Asia/Colombo
+      - eureka_server_port=http://eureka:8761
+      - server_port=8890
+      - test_module_group_id=se.cambio.qa
+      - test_module_artifact_id=cambio-taf-nova-ward-test
+      - test_module_version=1.0-SNAPSHOT
+    networks: 
+      - my-net
+ 
+networks: 
+  my-net:
+    
