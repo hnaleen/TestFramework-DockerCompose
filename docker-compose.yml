@@ -32,14 +32,14 @@ services:
     volumes:
       - "C:/Software/mvn_repo_352:/home/aft/mvn_repo"
     deploy:
-      replicas: 2
+      replicas: ${numberOfSlaves}
     environment: 
       - TZ=Asia/Colombo
       - eureka_server_port=http://eureka:8761
       - server_port=8890
-      - test_module_group_id=se.cambio.qa
-      - test_module_artifact_id=cambio-taf-nova-ward-test
-      - test_module_version=1.0-SNAPSHOT
+      - test_module_group_id=${testModuleGroupId}
+      - test_module_artifact_id=${testModuleArtifactId}
+      - test_module_version=${testModuleVersion}
     networks: 
       - my-net
  
